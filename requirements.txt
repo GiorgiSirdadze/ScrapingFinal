@@ -1,0 +1,15 @@
+beautifulsoup4
+lxml
+requests
+selenium
+webdriver-manager
+scrapy
+spacy
+textblob
+fuzzywuzzy
+scikit-learn
+matplotlib
+seaborn
+PyYAML
+pandas
+pytest
