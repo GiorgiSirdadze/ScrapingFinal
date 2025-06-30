@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from src.data.database import init_db, save_articles
 from src.scrapers.static_scraper import scrape_bbc_rss
 from src.scrapers.selenium_scraper import scrape_cnn_headlines
@@ -19,11 +20,17 @@ def load_techcrunch_articles():
 def scrape_all():
     init_db()
 
-    bbc = scrape_bbc_rss()
+    print("🧵 Scraping BBC and CNN in parallel...")
+    with ThreadPoolExecutor() as executor:
+        bbc_future = executor.submit(scrape_bbc_rss)
+        cnn_future = executor.submit(scrape_cnn_headlines)
+
+        bbc = bbc_future.result()
+        cnn = cnn_future.result()
+
     print(f"📰 BBC: {len(bbc)} articles scraped.")
     save_articles(bbc, "BBC")
 
-    cnn = scrape_cnn_headlines()
     print(f"📰 CNN: {len(cnn)} articles scraped.")
     save_articles(cnn, "CNN")
 
